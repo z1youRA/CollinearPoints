@@ -4,6 +4,16 @@ public class BruteCollinearPoints {
 
     public BruteCollinearPoints(Point[] points) {   // finds all line segments containing 4 points
         for (int i = 0; i < points.length; i++) {
+            if (points[i] == null) {
+                throw new IllegalArgumentException("Input Invalid: null points are given");
+            }
+            for (int j = i + 1; j < points.length; j++) {
+                if (points[i].slopeTo(points[j]) == Double.NEGATIVE_INFINITY) {
+                    throw new IllegalArgumentException("Input Invalid: Repeated points are given");
+                }
+            }
+        }
+        for (int i = 0; i < points.length; i++) {
             for (int j = i + 1; j < points.length; j++) {
                 double slope1 = points[j].slopeTo(points[i]);   // record the slope from i to j
                 for (int k = j + 1; k < points.length; k++) {
