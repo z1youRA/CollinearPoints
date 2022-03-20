@@ -1,7 +1,9 @@
 import java.util.Comparator;
 
 public class FastCollinearPoints {
-    private Point[] aux;
+    private Point[] aux, temp;
+    private LineSegment[] lines = new LineSegment[100];
+    private int lineCount = 0;
 
     public FastCollinearPoints(
             Point[] points) {   // finds all line segments containing 4 or more points
@@ -16,8 +18,20 @@ public class FastCollinearPoints {
             }
         }
         aux = new Point[points.length];
-        for (int i = 0; i < points.length; i++) {
-            sort(points[i].slopeOrder(), points, aux, 0, points.length - 1);
+        temp = new Point[points.length];
+        for (int i = 0; i < temp.length; i++) {
+            sort(temp[i].slopeOrder(), points, aux, 0, points.length - 1);
+            for (int j = 0; i < points.length; i++) {
+                double tempSlop = points[j].slopeTo(temp[i]);
+                int count = 1;
+                while (points[j + count].slopeTo(temp[i])
+                        == tempSlop) { // examine whether four dots followed are on the same line
+                    count++;
+                }
+                if (count >= 4) {
+                    lines[lineCount++] = new LineSegment(points[j], points[j + count - 1]);
+                }
+            }
         }
     }
 
@@ -52,7 +66,11 @@ public class FastCollinearPoints {
         return c.compare(v, w) < 0;
     }
 
-    public int numberOfSegments()        // the number of line segments
+    public int numberOfSegments() {    // the number of line segments
+        return lineCount;
+    }
 
-    public LineSegment[] segments()                // the line segments
+    public LineSegment[] segments() {  // the line segments
+        return lines;
+    }
 }
