@@ -21,39 +21,46 @@ public class FastCollinearPoints {
                 }
             }
         }
+
         Point[] aux = new Point[points.length];
         Point[] temp = new Point[points.length];
-        for (int i = 0; i < points.length; i++) {
+        Point[] starts = new Point[100];
+        Point[] ends = new Point[100];
+        for (int i = 0; i < points.length; i++) {   // put points to temp for later editing points
             temp[i] = points[i];
         }
         for (int i = 0; i < temp.length;
              i++) { // traverse points and sort points according to their slope to temp[i]
             sort(temp[i].slopeOrder(), points, aux, 0, points.length - 1);
-            for (Point p : points) {
-                System.out.println(p.getX());
-                System.out.println(p.getY()); // for debug
-            }
-            System.out.println("++++++++++++++++++++++++++++");
             for (int j = 0; j < points.length; j++) {
                 double tempSlop = points[j].slopeTo(temp[i]);
                 int count = 1;
-
                 while (j + count < points.length && points[j + count].slopeTo(temp[i])
                         == tempSlop) { // examine whether four dots followed are on the same line
                     count++;
                 }
                 if (count >= 3) {
+                    int flag = 0;
                     Point least = temp[i];
                     Point largest = temp[i]; // signal of the beginning and end of the line
                     for (int k = j; k < j + count; k++) {
                         if (points[j].compareTo(least) < 0) least = points[k];
                         else if (points[k].compareTo(largest) > 0) largest = points[k];
                     }
-                    lines[lineCount++] = new LineSegment(least, largest);
-                    // lines[lineCount++] = new LineSegment(points[j], points[j + count - 1]);
+                    for (int index = 0; index < lineCount; index++) {
+                        if (starts[index] == least && ends[index] == largest) {
+                            flag = 1;
+                        }
+                    }
+                    if (flag == 0) {
+                        lines[lineCount] = new LineSegment(least, largest);
+                        starts[lineCount] = least;
+                        ends[lineCount++] = largest;
+                    }
                 }
             }
         }
+
         linesResult = new LineSegment[lineCount];
         for (int i = 0; i < lineCount; i++) {
             linesResult[i] = lines[i];
