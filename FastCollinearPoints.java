@@ -23,7 +23,7 @@ public class FastCollinearPoints {
 
     private static void merge(Comparator comparator, Point[] a, Point[] aux, int low, int mid,
                               int high) {
-        for (int i = 0; i < a.length; i++) {
+        for (int i = low; i < high; i++) {
             aux[i] = a[i];
         }
         int i = low;
