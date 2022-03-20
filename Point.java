@@ -115,7 +115,6 @@ public class Point implements Comparable<Point> {
             }
             return 0;
         }
-
     }
 
     /**
