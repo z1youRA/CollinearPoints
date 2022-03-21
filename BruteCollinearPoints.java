@@ -28,8 +28,8 @@ public class BruteCollinearPoints {
 
     private LineSegment[] findLines() {
         ArrayList<LineSegment> lines = new ArrayList<>();
-        Point starts[] = new Point[100];
-        Point ends[] = new Point[100];
+        // Point starts[] = new Point[100];
+        // Point ends[] = new Point[100];
         for (int i = 0; i < this.points.length; i++) {
             for (int j = i + 1; j < this.points.length; j++) {
                 double slope1 = this.points[j]
@@ -50,17 +50,17 @@ public class BruteCollinearPoints {
                                                 .compareTo(this.points[k + m - kmMin]) > 0 ?
                                         i + j - ijMin :
                                         k + m - kmMin;
-                                for (int index = 0; index < linesNum;
-                                     index++) {    // check repetition of line little to large;
-                                    if (starts[index] == this.points[little]
-                                            && ends[index] == this.points[large]) {
-                                        flag = 1;
-                                        break;
-                                    }
-                                }
+                                // for (int index = 0; index < linesNum;
+                                //      index++) {    // check repetition of line little to large;
+                                //     if (starts[index] == this.points[little]
+                                //             && ends[index] == this.points[large]) {
+                                //         flag = 1;
+                                //         break;
+                                //     }
+                                // }
                                 if (flag == 0) {
-                                    starts[linesNum] = this.points[little];
-                                    ends[linesNum] = this.points[large];
+                                    // starts[linesNum] = this.points[little];
+                                    // ends[linesNum] = this.points[large];
                                     lines.add(new LineSegment(this.points[little],
                                                               this.points[large]));
                                 }
