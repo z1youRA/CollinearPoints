@@ -8,15 +8,18 @@ import java.util.Arrays;
 public class BruteCollinearPoints {
     private final LineSegment[] linesResult;
     private final Point[] points;
-    private int linesNum = 0;
 
     public BruteCollinearPoints(Point[] points) {   // finds all line segments containing 4 points
-
+        if (points == null) {
+            throw new IllegalArgumentException("Input Invalid: null points are given");
+        }
         this.points = Arrays.copyOf(points, points.length);
         for (int i = 0; i < this.points.length; i++) {
             if (this.points[i] == null) {
                 throw new IllegalArgumentException("Input Invalid: null points are given");
             }
+        }
+        for (int i = 0; i < this.points.length; i++) {
             for (int j = i + 1; j < this.points.length; j++) {
                 if (this.points[i].slopeTo(this.points[j]) == Double.NEGATIVE_INFINITY) {
                     throw new IllegalArgumentException("Input Invalid: Repeated points are given");
@@ -28,8 +31,6 @@ public class BruteCollinearPoints {
 
     private LineSegment[] findLines() {
         ArrayList<LineSegment> lines = new ArrayList<>();
-        // Point starts[] = new Point[100];
-        // Point ends[] = new Point[100];
         for (int i = 0; i < this.points.length; i++) {
             for (int j = i + 1; j < this.points.length; j++) {
                 double slope1 = this.points[j]
@@ -39,7 +40,7 @@ public class BruteCollinearPoints {
                             == slope1) {    // k is collinear to i and j
                         for (int m = k + 1; m < this.points.length; m++) {
                             if (this.points[m].slopeTo(this.points[k]) == slope1) {
-                                int little, large, flag = 0;
+                                int little, large;
                                 int ijMin, kmMin;
                                 // find the start and end of the line.
                                 ijMin = this.points[i].compareTo(this.points[j]) < 0 ? i : j;
@@ -50,20 +51,9 @@ public class BruteCollinearPoints {
                                                 .compareTo(this.points[k + m - kmMin]) > 0 ?
                                         i + j - ijMin :
                                         k + m - kmMin;
-                                // for (int index = 0; index < linesNum;
-                                //      index++) {    // check repetition of line little to large;
-                                //     if (starts[index] == this.points[little]
-                                //             && ends[index] == this.points[large]) {
-                                //         flag = 1;
-                                //         break;
-                                //     }
-                                // }
-                                if (flag == 0) {
-                                    // starts[linesNum] = this.points[little];
-                                    // ends[linesNum] = this.points[large];
-                                    lines.add(new LineSegment(this.points[little],
-                                                              this.points[large]));
-                                }
+                                lines.add(new LineSegment(this.points[little],
+                                                          this.points[large]));
+
                             }
                         }
                     }
@@ -76,7 +66,7 @@ public class BruteCollinearPoints {
     }
 
     public int numberOfSegments() {     // the number of line segments
-        return linesNum;
+        return linesResult.length;
     }
 
     public LineSegment[] segments() {     // the line segments
