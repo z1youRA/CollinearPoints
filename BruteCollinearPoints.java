@@ -27,16 +27,16 @@ public class BruteCollinearPoints {
                     if (points[k].slopeTo(points[j]) == slope1) {    // k is collinear to i and j
                         for (int m = k + 1; m < points.length; m++) {
                             if (points[m].slopeTo(points[k]) == slope1) {
-                                int little = i, large = i, flag = 0;
-                                for (int index = 0; index < 4; index++) {
-                                    if (points[index].compareTo(points[little]) < 0) {
-                                        little = index;
-                                    }
-                                    else if (points[index].compareTo(points[large]) > 0) {
-                                        large = index;
-                                    }
-                                }
-                                for (int index = 0; index < linesNum; index++) {
+                                int little, large, flag = 0;
+                                int ijMin, kmMin;
+                                ijMin = points[i].compareTo(points[j]) < 0 ? i : j;
+                                kmMin = points[k].compareTo(points[m]) < 0 ? k : m;
+                                little = points[ijMin].compareTo(points[kmMin]) < 0 ? ijMin : kmMin;
+                                large = points[i + j - ijMin].compareTo(points[k + m - kmMin]) > 0 ?
+                                        i + j - ijMin :
+                                        k + m - kmMin;
+                                for (int index = 0; index < linesNum;
+                                     index++) {    // check repetition of line little to large;
                                     if (starts[index] == points[little]
                                             && ends[index] == points[large]) {
                                         flag = 1;
