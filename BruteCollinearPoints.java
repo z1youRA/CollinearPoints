@@ -8,6 +8,8 @@ public class BruteCollinearPoints {
     private int linesNum = 0;
 
     public BruteCollinearPoints(Point[] points) {   // finds all line segments containing 4 points
+        Point starts[] = new Point[100];
+        Point ends[] = new Point[100];
         for (int i = 0; i < points.length; i++) {
             if (points[i] == null) {
                 throw new IllegalArgumentException("Input Invalid: null points are given");
@@ -25,7 +27,7 @@ public class BruteCollinearPoints {
                     if (points[k].slopeTo(points[j]) == slope1) {    // k is collinear to i and j
                         for (int m = k + 1; m < points.length; m++) {
                             if (points[m].slopeTo(points[k]) == slope1) {
-                                int little = i, large = i;
+                                int little = i, large = i, flag = 0;
                                 for (int index = 0; index < 4; index++) {
                                     if (points[index].compareTo(points[little]) < 0) {
                                         little = index;
@@ -34,7 +36,19 @@ public class BruteCollinearPoints {
                                         large = index;
                                     }
                                 }
-                                lines[linesNum++] = new LineSegment(points[little], points[large]);
+                                for (int index = 0; index < linesNum; index++) {
+                                    if (starts[index] == points[little]
+                                            && ends[index] == points[large]) {
+                                        flag = 1;
+                                        break;
+                                    }
+                                }
+                                if (flag == 0) {
+                                    starts[linesNum] = points[little];
+                                    ends[linesNum] = points[large];
+                                    lines[linesNum++] = new LineSegment(points[little],
+                                                                        points[large]);
+                                }
                                 if (linesNum >= 100) {
                                     throw new UnsupportedOperationException(
                                             "Lines number exceeded");
